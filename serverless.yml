@@ -3,7 +3,7 @@ service: artisto-video-analysis
 custom:
   awsRegion: us-east-1
   videosBucket: ${file(./config.${self:provider.stage}.json):videosBucket}
-  videosDynamoDBTable: ${file(../config.${self:provider.stage}.json):videosDynamoDBTable}
+  videosDynamoDBTable: ${file(./config.${self:provider.stage}.json):videosDynamoDBTable}
 
 provider:
   name: aws
