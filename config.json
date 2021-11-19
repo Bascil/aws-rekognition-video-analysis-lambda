@@ -1,0 +1,5 @@
+{
+  "awsProfile": "",
+  "videosBucket": "artisto-raw-videos",
+  "videosDynamoDBTable": "artisto-content-moderation"
+}
