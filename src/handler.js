@@ -2,6 +2,8 @@
 
 const Rekognition = require('aws-sdk/clients/rekognition');
 const DynamoDB = require('aws-sdk/clients/dynamodb');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 
 module.exports.startProcessingVideo = async (event, context) => {
   // loop through objects
