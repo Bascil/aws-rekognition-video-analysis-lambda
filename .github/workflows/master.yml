@@ -1,4 +1,4 @@
-name: Deploy Video Analysis Service
+name: Deploy Video Moderation Service
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch

@@ -1,4 +1,4 @@
-service: artisto-video-analysis
+service: artisto-video-moderation
 
 custom:
   awsRegion: us-east-1
