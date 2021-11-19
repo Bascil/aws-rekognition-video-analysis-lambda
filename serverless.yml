@@ -13,7 +13,7 @@ provider:
 
 functions:
   StartProcessingVideo: # StartProcessingVideo Lambda function
-    handler: handler.startProcessingVideo
+    handler: src/handler.startProcessingVideo
     role: StartProcessingVideoLambdaRole
     environment:
       VIDEO_PROCESSED_SNSTOPIC_ARN:
@@ -28,7 +28,7 @@ functions:
             - suffix: .mp4
           existing: true
   HandleProcessedVideo: # HandleProcessedVideo Lambda function
-    handler: handler.handleProcessedVideo
+    handler: src/handler.handleProcessedVideo
     role: HandleProcessedVideoLambdaRole
     environment:
       VIDEOS_DYNAMODB_TABLE: ${self:custom.videosDynamoDBTable}
