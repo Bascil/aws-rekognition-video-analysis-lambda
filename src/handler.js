@@ -32,7 +32,7 @@ module.exports.startProcessingVideo = async (event, context) => {
 };
 
 module.exports.handleProcessedVideo = async (event, context) => {
-  // loop through all processd videos
+  // loop through all processed videos
   for (let record of event.Records) {
     const {
       Sns: { Message },
@@ -40,6 +40,8 @@ module.exports.handleProcessedVideo = async (event, context) => {
 
     const message = JSON.parse(Message);
     const labels = await getLabelDetection(message.JobId);
+
+    await saveLabels(message.JobId, labels);
 
     await putLabelsInDB(
       message.Video.S3Bucket,
@@ -62,6 +64,18 @@ module.exports.handleProcessedVideo = async (event, context) => {
         },
       })
       .promise();
+  }
+
+  async function saveLabels(jobId, labels) {
+    const destparams = {
+      Bucket: 'artisto-video-labels',
+      Key: `labels/${jobId}/labels.json`,
+      Body: JSON.stringify(labels),
+      ContentType: 'json',
+      ACL: 'public-read',
+    };
+
+    return s3.upload(destparams).promise();
   }
 
   async function getLabelDetection(jobId) {
