@@ -2,8 +2,8 @@
 
 const Rekognition = require('aws-sdk/clients/rekognition');
 const DynamoDB = require('aws-sdk/clients/dynamodb');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+// const AWS = require('aws-sdk');
+// const s3 = new AWS.S3();
 
 module.exports.startProcessingVideo = async (event, context) => {
   // loop through objects
@@ -43,7 +43,7 @@ module.exports.handleProcessedVideo = async (event, context) => {
     const message = JSON.parse(Message);
     const labels = await getLabelDetection(message.JobId);
 
-    await saveLabels(message.JobId, labels);
+    //await saveLabels(message.JobId, labels);
 
     await putLabelsInDB(
       message.Video.S3Bucket,
@@ -68,17 +68,17 @@ module.exports.handleProcessedVideo = async (event, context) => {
       .promise();
   }
 
-  async function saveLabels(jobId, labels) {
-    const destparams = {
-      Bucket: 'artisto-video-labels',
-      Key: `labels/${jobId}/labels.json`,
-      Body: JSON.stringify(labels),
-      ContentType: 'json',
-      ACL: 'public-read',
-    };
+  // async function saveLabels(jobId, labels) {
+  //   const destparams = {
+  //     Bucket: 'artisto-video-labels',
+  //     Key: `labels/${jobId}/labels.json`,
+  //     Body: JSON.stringify(labels),
+  //     ContentType: 'json',
+  //     ACL: 'public-read',
+  //   };
 
-    return s3.upload(destparams).promise();
-  }
+  //   return s3.upload(destparams).promise();
+  // }
 
   async function getLabelDetection(jobId) {
     const rekognition = new Rekognition({ apiVersion: 'latest' });
