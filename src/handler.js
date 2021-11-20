@@ -20,8 +20,9 @@ module.exports.startProcessingVideo = async (event, context) => {
     const rekognition = new Rekognition({ apiVersion: 'latest' });
 
     const { JobId } = await rekognition
-      .startLabelDetection({
+      .startContentModeration({
         Video: { S3Object: { Bucket: bucketName, Name: objectKey } },
+        MinConfidence: 80,
         NotificationChannel: {
           SNSTopicArn: process.env.VIDEO_PROCESSED_SNSTOPIC_ARN,
           RoleArn: process.env.REKOGNITION_PUBLISH_SNSTOPIC_ROLE_ARN,
@@ -41,7 +42,7 @@ module.exports.handleProcessedVideo = async (event, context) => {
     } = record;
 
     const message = JSON.parse(Message);
-    const labels = await getLabelDetection(message.JobId);
+    const labels = await getContentModeration(message.JobId);
 
     await putLabelsInMongoDB(
       message.Video.S3Bucket,
