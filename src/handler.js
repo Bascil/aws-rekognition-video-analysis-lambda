@@ -20,7 +20,7 @@ module.exports.startProcessingVideo = async (event, context) => {
     const rekognition = new Rekognition({ apiVersion: 'latest' });
 
     const { JobId } = await rekognition
-      .startContentModeration({
+      .startLabelDetection({
         Video: { S3Object: { Bucket: bucketName, Name: objectKey } },
         MinConfidence: 80,
         NotificationChannel: {
@@ -96,12 +96,12 @@ module.exports.handleProcessedVideo = async (event, context) => {
     const rekognition = new Rekognition({ apiVersion: 'latest' });
 
     let { Labels: labels, NextToken: nextToken } = await rekognition
-      .getContentModeration({ JobId: jobId })
+      .getLabelDetection({ JobId: jobId })
       .promise();
 
     while (nextToken) {
       let response = await rekognition
-        .getContentModeration({ JobId: jobId, NextToken: nextToken })
+        .getLabelDetection({ JobId: jobId, NextToken: nextToken })
         .promise();
 
       nextToken = response.NextToken;
