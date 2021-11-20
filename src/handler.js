@@ -42,7 +42,7 @@ module.exports.handleProcessedVideo = async (event, context) => {
     } = record;
 
     const message = JSON.parse(Message);
-    const labels = await getContentModeration(message.JobId);
+    const labels = await getLabelDetection(message.JobId);
 
     await putLabelsInMongoDB(
       message.Video.S3Bucket,
@@ -96,12 +96,12 @@ module.exports.handleProcessedVideo = async (event, context) => {
     const rekognition = new Rekognition({ apiVersion: 'latest' });
 
     let { Labels: labels, NextToken: nextToken } = await rekognition
-      .getLabelDetection({ JobId: jobId })
+      .getContentModeration({ JobId: jobId })
       .promise();
 
     while (nextToken) {
       let response = await rekognition
-        .getLabelDetection({ JobId: jobId, NextToken: nextToken })
+        .getContentModeration({ JobId: jobId, NextToken: nextToken })
         .promise();
 
       nextToken = response.NextToken;
