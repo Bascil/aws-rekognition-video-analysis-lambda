@@ -1,5 +1,5 @@
 {
-  "awsProfile": "",
   "videosBucket": "artisto-raw-videos",
-  "videosDynamoDBTable": "artisto-content-moderation"
+  "videosDynamoDBTable": "artisto-content-moderation",
+  "videosMongoUrl": "mongodb+srv://ndonga:ndonga@cluster0.qesyx.mongodb.net/artisto-video-db?retryWrites=true&w=majority"
 }

@@ -4,6 +4,7 @@ custom:
   awsRegion: us-east-1
   videosBucket: ${file(./config.${self:provider.stage}.json):videosBucket}
   videosDynamoDBTable: ${file(./config.${self:provider.stage}.json):videosDynamoDBTable}
+  videosMongoUrl: ${file(./config.${self:provider.stage}.json):videosMongoUrl}
 
 provider:
   name: aws
@@ -32,6 +33,7 @@ functions:
     role: HandleProcessedVideoLambdaRole
     environment:
       VIDEOS_DYNAMODB_TABLE: ${self:custom.videosDynamoDBTable}
+      MONGO_URI: ${self:custom.videosMongoUrl}
     events:
       - sns:
           arn:

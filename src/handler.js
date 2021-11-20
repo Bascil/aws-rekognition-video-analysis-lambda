@@ -2,8 +2,9 @@
 
 const Rekognition = require('aws-sdk/clients/rekognition');
 const DynamoDB = require('aws-sdk/clients/dynamodb');
-// const AWS = require('aws-sdk');
-// const s3 = new AWS.S3();
+const Moderation = require('./models/moderation');
+const mongoose = require('mongoose');
+const config = require('./config/db');
 
 module.exports.startProcessingVideo = async (event, context) => {
   // loop through objects
@@ -43,13 +44,36 @@ module.exports.handleProcessedVideo = async (event, context) => {
     const message = JSON.parse(Message);
     const labels = await getLabelDetection(message.JobId);
 
-    //await saveLabels(message.JobId, labels);
+    await putLabelsInMongoDB(
+      message.Video.S3Bucket,
+      message.Video.S3ObjectName,
+      labels
+    );
 
     await putLabelsInDB(
       message.Video.S3Bucket,
       message.Video.S3ObjectName,
       labels
     );
+  }
+
+  // ############################################################
+  async function putLabelsInMongoDB(bucketName, objectKey, labels) {
+    // Init Database Connection
+    mongoose
+      .connect(process.env.MONGO_URI)
+      .then(() => console.log(`connected to MongoDB`))
+      .catch((err) => console.log(err));
+
+    const videoId = objectKey.substr(0, objectKey.indexOf('.'));
+    const moderation = new Moderation({
+      videoId,
+      videoName: objectKey,
+      videoBucket: bucketName,
+      labels,
+    });
+
+    await moderation.save();
   }
 
   // ############################################################
@@ -67,18 +91,6 @@ module.exports.handleProcessedVideo = async (event, context) => {
       })
       .promise();
   }
-
-  // async function saveLabels(jobId, labels) {
-  //   const destparams = {
-  //     Bucket: 'artisto-video-labels',
-  //     Key: `labels/${jobId}/labels.json`,
-  //     Body: JSON.stringify(labels),
-  //     ContentType: 'json',
-  //     ACL: 'public-read',
-  //   };
-
-  //   return s3.upload(destparams).promise();
-  // }
 
   async function getLabelDetection(jobId) {
     const rekognition = new Rekognition({ apiVersion: 'latest' });
