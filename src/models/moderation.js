@@ -1,6 +1,4 @@
 const Mongoose = require('mongoose');
-const updateIfCurrentPlugin =
-  require('mongoose-update-if-current').updateIfCurrentPlugin;
 const { Schema } = Mongoose;
 
 // Moderation Schema
@@ -42,8 +40,5 @@ const ModerationSchema = new Schema(
     },
   }
 );
-
-ModerationSchema.set('versionKey', 'version');
-ModerationSchema.plugin(updateIfCurrentPlugin);
 
 module.exports = Mongoose.model('Moderation', ModerationSchema);
