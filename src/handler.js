@@ -4,7 +4,6 @@ const Rekognition = require('aws-sdk/clients/rekognition');
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 const Moderation = require('./models/moderation');
 const mongoose = require('mongoose');
-const config = require('./config/db');
 
 module.exports.startProcessingVideo = async (event, context) => {
   // loop through objects
