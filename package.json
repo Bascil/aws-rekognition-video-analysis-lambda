@@ -5,5 +5,7 @@
   "repository": "https://github.com/Bascil/artisto-video-analysis.git",
   "author": "Basil Ndonga <basil.ndonga@iprocu.re>",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "mongoose": "^6.0.11"
+  }
 }
