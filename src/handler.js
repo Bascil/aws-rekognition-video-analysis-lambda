@@ -1,7 +1,7 @@
 'use strict';
 
 const Rekognition = require('aws-sdk/clients/rekognition');
-const DynamoDB = require('aws-sdk/clients/dynamodb');
+// const DynamoDB = require('aws-sdk/clients/dynamodb');
 const Moderation = require('./models/moderation');
 const mongoose = require('mongoose');
 
@@ -49,11 +49,11 @@ module.exports.handleProcessedVideo = async (event, context) => {
       labels
     );
 
-    await putLabelsInDB(
-      message.Video.S3Bucket,
-      message.Video.S3ObjectName,
-      labels
-    );
+    // await putLabelsInDynamoDB(
+    //   message.Video.S3Bucket,
+    //   message.Video.S3ObjectName,
+    //   labels
+    // );
   }
 
   // ############################################################
@@ -76,20 +76,20 @@ module.exports.handleProcessedVideo = async (event, context) => {
   }
 
   // ############################################################
-  async function putLabelsInDB(bucketName, objectKey, labels) {
-    const dynamoDB = new DynamoDB.DocumentClient({ apiVersion: 'latest' });
+  // async function putLabelsInDynamoDB(bucketName, objectKey, labels) {
+  //   const dynamoDB = new DynamoDB.DocumentClient({ apiVersion: 'latest' });
 
-    await dynamoDB
-      .put({
-        TableName: process.env.VIDEOS_DYNAMODB_TABLE,
-        Item: {
-          videoName: objectKey,
-          videoBucket: bucketName,
-          labels,
-        },
-      })
-      .promise();
-  }
+  //   await dynamoDB
+  //     .put({
+  //       TableName: process.env.VIDEOS_DYNAMODB_TABLE,
+  //       Item: {
+  //         videoName: objectKey,
+  //         videoBucket: bucketName,
+  //         labels,
+  //       },
+  //     })
+  //     .promise();
+  // }
 
   async function getLabelDetection(jobId) {
     const rekognition = new Rekognition({ apiVersion: 'latest' });
